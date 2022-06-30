@@ -19,16 +19,31 @@ async function main() {
   //attach filter for lotery events
   lotteryGameContract
     .on("TicketCreated", async (to: any, transaction: any) => {
-      console.log(to, transaction);
+      // console.log(to, transaction);
       console.log("TicketCreated")
+    })
+    .on("LotteryPickedWinner", async (to: any, transaction: any) => {
+      console.log("LotteryPickedWinner")
+
+      //show lottery ballance
+      console.log(`ballance: ${await lotteryGameContract.getBalance()}`)
+
+      //show user balances
+      console.log(await ticketHolder1.getBalance())
+      console.log(await ticketHolder2.getBalance())
+      console.log(await ticketHolder3.getBalance())
+      console.log(await ticketHolder4.getBalance())
     });
 
   //buy a ticket for atleast 0.1 ether
   const options = { value: ethers.utils.parseEther("0.011") }
-  lotteryGameContract.connect(ticketHolder1).enter(options)
-  lotteryGameContract.connect(ticketHolder2).enter(options)
-  lotteryGameContract.connect(ticketHolder3).enter(options)
-  lotteryGameContract.connect(ticketHolder4).enter(options)
+  await lotteryGameContract.connect(ticketHolder1).enter(options)
+  await lotteryGameContract.connect(ticketHolder2).enter(options)
+  await lotteryGameContract.connect(ticketHolder3).enter(options)
+  await lotteryGameContract.connect(ticketHolder4).enter(options)
+
+  //pick lottery winner
+  await lotteryGameContract.pickWinner()
 }
 
 main().catch((error) => {

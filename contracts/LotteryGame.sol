@@ -14,6 +14,7 @@ contract LotteryGame {
     LotteryTicket[] public tickets;
 
     event TicketCreated(address indexed _from);
+    event LotteryPickedWinner(address indexed _from);
 
     constructor(uint256 _startBlock, uint256 _endBlock) {
         owner = msg.sender;
@@ -66,7 +67,9 @@ contract LotteryGame {
         lotteryHistory[lotteryId] = players[index];
 
         //transfer after state change
-        players[index].transfer(address(this).balance);
+        players[index].transfer(address(this).balance / 2);
+
+        emit LotteryPickedWinner(msg.sender);
 
         // reset the state of the contract
         players = new address payable[](0);
