@@ -6,6 +6,8 @@ import "./LotteryTicket.sol";
 contract LotteryGame {
     address public owner;
     address payable[] public players;
+    uint256 private startBlock;
+    uint256 private endBlock;
     uint256 public lotteryId;
     mapping(uint256 => address payable) public lotteryHistory;
 
@@ -13,9 +15,11 @@ contract LotteryGame {
 
     event TicketCreated(address indexed _from);
 
-    constructor() {
+    constructor(uint256 _startBlock, uint256 _endBlock) {
         owner = msg.sender;
         lotteryId = 1;
+        startBlock = _startBlock;
+        endBlock = _endBlock;
     }
 
     function getWinnerByLottery(uint256 lottery)
@@ -35,7 +39,8 @@ contract LotteryGame {
     }
 
     function enter() public payable {
-        require(msg.value > .01 ether);
+        require(msg.value >= .01 ether, "Need at least 0.1 ether to enter");
+        require(block.number <= endBlock, "The lottery ended");
 
         //create new ticket and safe mint
         LotteryTicket ticket = new LotteryTicket();
@@ -56,17 +61,19 @@ contract LotteryGame {
 
     function pickWinner() public onlyowner {
         uint256 index = getRandomNumber() % players.length;
-        players[index].transfer(address(this).balance);
 
-        lotteryHistory[lotteryId] = players[index];
         lotteryId++;
+        lotteryHistory[lotteryId] = players[index];
+
+        //transfer after state change
+        players[index].transfer(address(this).balance);
 
         // reset the state of the contract
         players = new address payable[](0);
     }
 
     modifier onlyowner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "You are not the owner");
         _;
     }
 }
