@@ -3,14 +3,14 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Create2.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import "./LotteryTicket.sol";
+import "./Lottery.sol";
 
 contract Create2Factory {
     address payable[] public players;
     uint256 private startBlock;
     uint256 private endBlock;
-    LotteryTicket loteryTicket;
-    LotteryTicket[] public tickets;
+    Lottery loteryTicket;
+    Lottery[] public tickets;
 
     event GameWon(address payable winner);
 
@@ -21,18 +21,18 @@ contract Create2Factory {
     ) public {
         startBlock = _startBlock;
         endBlock = _endBlock;
-        address lotteryTicketContractAddress;
+        address LotteryContractAddress;
 
-        lotteryTicketContractAddress = Create2.deploy(
+        LotteryContractAddress = Create2.deploy(
             0,
             salt,
-            type(LotteryTicket).creationCode
+            type(Lottery).creationCode
         );
 
-        address newLotteryTicketContractAddress = Clones.clone(
-            lotteryTicketContractAddress
+        address newLotteryContractAddress = Clones.clone(
+            LotteryContractAddress
         );
-        loteryTicket = LotteryTicket(newLotteryTicketContractAddress);
+        loteryTicket = Lottery(newLotteryContractAddress);
         loteryTicket.initialize();
     }
 
@@ -40,7 +40,7 @@ contract Create2Factory {
         return
             Create2.computeAddress(
                 salt,
-                keccak256(type(LotteryTicket).creationCode)
+                keccak256(type(Lottery).creationCode)
             );
     }
 
@@ -59,7 +59,7 @@ contract Create2Factory {
         players.push(payable(msg.sender));
     }
 
-    function getRandomNumber() public view returns (uint256) {
+    function getRandomNumber() private view returns (uint256) {
         return uint256(keccak256(abi.encodePacked(this, block.timestamp)));
     }
 

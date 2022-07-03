@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
-contract LotteryTicket is
+contract Lottery is
     Initializable,
     ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
@@ -30,7 +30,7 @@ contract LotteryTicket is
         external
         initializer
     {
-        __ERC721_init("LotteryTicket", "P5LTR");
+        __ERC721_init("Lottery", "P5LTR");
         __ERC721Enumerable_init();
         __ERC721URIStorage_init();
         __Ownable_init();

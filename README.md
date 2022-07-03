@@ -1,3 +1,20 @@
+# Description
+A simple project representin a lottery game consisting of 2 main contracts.
+
+* `Lottey.sol` - a smart contract representing a lottery nft minting contract
+* `Create2Factory` - a lottery game factory to create a lottery game and deploy the `Lottery.sol` contract
+
+Used: 
+* hardhat - provider - to create a local blockchain environment with a few ready accounts to use
+* ethers - a client to manage blockchain operations
+* Clones - to create a minimal proxy also called a clone of the Lottery smart contract
+* Create2 - to deploy a the Lottery smart contract
+
+# How to run:
+`git clone git@github.com:Plamen5kov/solidity-smart-contract.git`
+`yarn`
+`npx hardhat run scripts/lottery.js` OR `npx hardhat test`
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
@@ -24,23 +41,3 @@ npx prettier '**/*.{json,sol,md}' --write
 npx solhint 'contracts/**/*.sol'
 npx solhint 'contracts/**/*.sol' --fix
 ```
-
-# Etherscan verification
-
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
-
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
-
-```shell
-hardhat run --network ropsten scripts/deploy.ts
-```
-
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
-
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
-
-# Performance optimizations
-
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
