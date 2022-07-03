@@ -7,44 +7,49 @@ async function main() {
 
   //get user accounts to buy tickets
   const signers = await ethers.getSigners();
+  const owner = signers[0]
   const ticketHolder1 = signers[1]
   const ticketHolder2 = signers[2]
   const ticketHolder3 = signers[3]
   const ticketHolder4 = signers[4]
+  const salt = "10=-dx1h2=x208"
 
-  //deploy lottery game
-  const LotteryGameFactory = await ethers.getContractFactory("LotteryGame")
-  const lotteryGameContract = await LotteryGameFactory.deploy(currentBlockNumber, currentBlockNumber + 5)
+  //create lottery game factory
+  const Create2Factory = await ethers.getContractFactory("Create2Factory")
+
+  //deploy the contract
+  const create2FactoryContract = await Create2Factory.deploy()
+
+  // deploy the lottery game with start configuration
+  await create2FactoryContract.deployGame(ethers.utils.formatBytes32String(salt), currentBlockNumber, currentBlockNumber + 20)
 
   //attach filter for lotery events
-  lotteryGameContract
-    .on("TicketCreated", async (to: any, transaction: any) => {
-      // console.log(to, transaction);
-      console.log("TicketCreated")
-    })
-    .on("LotteryPickedWinner", async (to: any, transaction: any) => {
-      console.log("LotteryPickedWinner")
-
-      //show lottery ballance
-      console.log(`ballance: ${await lotteryGameContract.getBalance()}`)
-
-      //show user balances
+  create2FactoryContract
+    .on("GameWon", async (address: any) => {
+      console.log(`game won by: ${address}`)
       console.log(await ticketHolder1.getBalance())
       console.log(await ticketHolder2.getBalance())
       console.log(await ticketHolder3.getBalance())
       console.log(await ticketHolder4.getBalance())
-    });
+      console.log(`game ballance: ${await create2FactoryContract.getBalance()}`)
+    })
 
-  //buy a ticket for atleast 0.1 ether
-  const options = { value: ethers.utils.parseEther("0.011") }
-  await lotteryGameContract.connect(ticketHolder1).enter(options)
-  await lotteryGameContract.connect(ticketHolder2).enter(options)
-  await lotteryGameContract.connect(ticketHolder3).enter(options)
-  await lotteryGameContract.connect(ticketHolder4).enter(options)
+    ;
 
-  //pick lottery winner
-  await lotteryGameContract.pickWinner()
+  //buy tickets 0.1 ether
+  const options = {
+    value: ethers.utils.parseEther("0.01"),
+    gasLimit: ethers.utils.parseEther("0.000000000003")
+  }
+  await create2FactoryContract.connect(ticketHolder1).buyTicket(options)
+  await create2FactoryContract.connect(ticketHolder2).buyTicket(options)
+  await create2FactoryContract.connect(ticketHolder3).buyTicket(options)
+  await create2FactoryContract.connect(ticketHolder4).buyTicket(options)
+
+  // pick lottery winner
+  await create2FactoryContract.pickWinner()
 }
+
 
 main().catch((error) => {
   console.error(error);
