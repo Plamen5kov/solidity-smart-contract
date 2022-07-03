@@ -1,19 +1,22 @@
 # Description
+
 A simple project representin a lottery game consisting of 2 main contracts.
 
-* `Lottey.sol` - a smart contract representing a lottery nft minting contract
-* `Create2Factory` - a lottery game factory to create a lottery game and deploy the `Lottery.sol` contract
+- `Lottey.sol` - a smart contract representing a lottery nft minting contract
+- `Create2Factory` - a lottery game factory to create a lottery game and deploy the `Lottery.sol` contract
 
-Used: 
-* hardhat - provider - to create a local blockchain environment with a few ready accounts to use
-* ethers - a client to manage blockchain operations
-* Clones - to create a minimal proxy also called a clone of the Lottery smart contract
-* Create2 - to deploy a the Lottery smart contract
+Used:
+
+- hardhat - provider - to create a local blockchain environment with a few ready accounts to use
+- ethers - a client to manage blockchain operations
+- Clones - to create a minimal proxy also called a clone of the Lottery smart contract
+- Create2 - to deploy a the Lottery smart contract
 
 # How to run:
-* `git clone git@github.com:Plamen5kov/solidity-smart-contract.git`
-* `yarn`
-* `npx hardhat run scripts/lottery.ts` OR `npx hardhat test`
+
+- `git clone git@github.com:Plamen5kov/solidity-smart-contract.git`
+- `yarn`
+- `npx hardhat run scripts/lottery.ts` OR `npx hardhat test`
 
 # Advanced Sample Hardhat Project
 
@@ -32,8 +35,7 @@ npx hardhat node
 npx hardhat help
 REPORT_GAS=true npx hardhat test
 npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
+npx hardhat run scripts/lottery.ts
 npx eslint '**/*.{js,ts}'
 npx eslint '**/*.{js,ts}' --fix
 npx prettier '**/*.{json,sol,md}' --check

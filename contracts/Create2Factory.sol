@@ -9,7 +9,7 @@ contract Create2Factory {
     address payable[] public players;
     uint256 private startBlock;
     uint256 private endBlock;
-    Lottery loteryTicket;
+    Lottery private loteryTicket;
     Lottery[] public tickets;
 
     event GameWon(address payable winner);
@@ -21,16 +21,16 @@ contract Create2Factory {
     ) public {
         startBlock = _startBlock;
         endBlock = _endBlock;
-        address LotteryContractAddress;
+        address lotteryContractAddress;
 
-        LotteryContractAddress = Create2.deploy(
+        lotteryContractAddress = Create2.deploy(
             0,
             salt,
             type(Lottery).creationCode
         );
 
         address newLotteryContractAddress = Clones.clone(
-            LotteryContractAddress
+            lotteryContractAddress
         );
         loteryTicket = Lottery(newLotteryContractAddress);
         loteryTicket.initialize();
@@ -38,10 +38,7 @@ contract Create2Factory {
 
     function computeAddress(bytes32 salt) public view returns (address) {
         return
-            Create2.computeAddress(
-                salt,
-                keccak256(type(Lottery).creationCode)
-            );
+            Create2.computeAddress(salt, keccak256(type(Lottery).creationCode));
     }
 
     function getBalance() public view returns (uint256) {

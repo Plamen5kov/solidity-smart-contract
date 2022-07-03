@@ -26,10 +26,7 @@ contract Lottery is
         _disableInitializers();
     }
 
-    function initialize()
-        external
-        initializer
-    {
+    function initialize() external initializer {
         __ERC721_init("Lottery", "P5LTR");
         __ERC721Enumerable_init();
         __ERC721URIStorage_init();
