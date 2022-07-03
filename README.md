@@ -13,7 +13,7 @@ Used:
 # How to run:
 * `git clone git@github.com:Plamen5kov/solidity-smart-contract.git`
 * `yarn`
-* `npx hardhat run scripts/lottery.js` OR `npx hardhat test`
+* `npx hardhat run scripts/lottery.ts` OR `npx hardhat test`
 
 # Advanced Sample Hardhat Project
 
